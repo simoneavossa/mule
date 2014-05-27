@@ -37,6 +37,7 @@
 # /conf
 #
 /mule-standalone-${productVersion}/conf/log4j.properties
+/mule-standalone-${productVersion}/conf/logback.xml
 /mule-standalone-${productVersion}/conf/wrapper.conf
 /mule-standalone-${productVersion}/conf/tls-default.conf
 /mule-standalone-${productVersion}/conf/tls-fips140-2.conf
@@ -404,9 +405,15 @@
 /mule-standalone-${productVersion}/lib/boot/libwrapper-solaris-sparc-64.so
 /mule-standalone-${productVersion}/lib/boot/libwrapper-solaris-x86-32.so
 /mule-standalone-${productVersion}/lib/boot/commons-cli-1.2.jar
-/mule-standalone-${productVersion}/lib/boot/log4j-1.2.16.jar
+
+/mule-standalone-${productVersion}/lib/boot/jcl-over-slf4j-1.7.6.jar
+/mule-standalone-${productVersion}/lib/boot/log4j-over-slf4j-1.7.6.jar
+/mule-standalone-${productVersion}/lib/boot/slf4j-api-1.7.6.jar
+/mule-standalone-${productVersion}/lib/boot/logback-classic-1.1.2.jar
+/mule-standalone-${productVersion}/lib/boot/logback-core-1.1.2.jar
+
 /mule-standalone-${productVersion}/lib/boot/mule-module-boot-${productVersion}.jar
-/mule-standalone-${productVersion}/lib/boot/mule-module-logging-${productVersion}.jar
+# /mule-standalone-${productVersion}/lib/boot/mule-module-logging-${productVersion}.jar
 /mule-standalone-${productVersion}/lib/boot/mule-module-reboot-${productVersion}.jar
 /mule-standalone-${productVersion}/lib/boot/README.txt
 /mule-standalone-${productVersion}/lib/boot/wrapper-3.2.3.jar

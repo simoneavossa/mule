@@ -18,8 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggerRepository;
-import org.apache.log4j.spi.RepositorySelector;
 import org.junit.Test;
 
 public class ArtifactAwareRepositorySelectorTestCase extends AbstractMuleTestCase
@@ -52,9 +50,9 @@ public class ArtifactAwareRepositorySelectorTestCase extends AbstractMuleTestCas
         CompositeApplicationClassLoader compositeClassLoader = new CompositeApplicationClassLoader(TEST_APP_NAME, classLoaders);
 
         Thread.currentThread().setContextClassLoader(compositeClassLoader);
-
-        RepositorySelector repositorySelector = new ArtifactAwareRepositorySelector();
-        LoggerRepository repository = repositorySelector.getLoggerRepository();
+        //
+        //RepositorySelector repositorySelector = new ArtifactAwareRepositorySelector();
+        //LoggerRepository repository = repositorySelector.getLoggerRepository();
 
         // A config watch dog thread should be started when creating the logger repository with an ApplicationClassLoader
 
@@ -95,13 +93,13 @@ public class ArtifactAwareRepositorySelectorTestCase extends AbstractMuleTestCas
 
     private boolean isConfigWatchDogThreadRunning()
     {
-        for (Thread thread : Thread.getAllStackTraces().keySet())
-        {
-            if (thread instanceof ArtifactAwareRepositorySelector.ConfigWatchDog)
-            {
-                return true;
-            }
-        }
+        //for (Thread thread : Thread.getAllStackTraces().keySet())
+        //{
+        //    if (thread instanceof ArtifactAwareRepositorySelector.ConfigWatchDog)
+        //    {
+        //        return true;
+        //    }
+        //}
         return false;
     }
 }
