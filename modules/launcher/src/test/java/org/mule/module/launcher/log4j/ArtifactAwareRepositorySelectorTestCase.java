@@ -95,13 +95,13 @@ public class ArtifactAwareRepositorySelectorTestCase extends AbstractMuleTestCas
 
     private boolean isConfigWatchDogThreadRunning()
     {
-        for (Thread thread : Thread.getAllStackTraces().keySet())
-        {
-            if (thread instanceof ArtifactAwareRepositorySelector.ConfigWatchDog)
-            {
-                return true;
-            }
-        }
+        //for (Thread thread : Thread.getAllStackTraces().keySet())
+        //{
+        //    if (thread instanceof ArtifactAwareRepositorySelector.ConfigWatchDog)
+        //    {
+        //        return true;
+        //    }
+        //}
         return false;
     }
 }

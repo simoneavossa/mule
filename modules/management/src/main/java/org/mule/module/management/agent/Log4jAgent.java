@@ -24,8 +24,6 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
-import org.apache.log4j.jmx.HierarchyDynamicMBean;
-
 /**
  * <code>Log4jAgent</code> exposes the configuration of the Log4J instance running
  * in Mule for Jmx management
@@ -57,7 +55,7 @@ public class Log4jAgent extends AbstractAgent
             final ObjectName objectName = jmxSupport.getObjectName(JMX_OBJECT_NAME);
             // unregister existing Log4j MBean first if required
             unregisterMBeansIfNecessary();
-            mBeanServer.registerMBean(new HierarchyDynamicMBean(), objectName);
+            //mBeanServer.registerMBean(new HierarchyDynamicMBean(), objectName);
         }
         catch (Exception e)
         {

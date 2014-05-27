@@ -6,49 +6,20 @@
  */
 package org.mule.module.launcher.log4j;
 
-import org.mule.api.MuleRuntimeException;
-import org.mule.config.i18n.CoreMessages;
-import org.mule.module.launcher.DirectoryResourceLocator;
-import org.mule.module.launcher.LocalResourceLocator;
-import org.mule.module.launcher.application.ApplicationClassLoader;
-import org.mule.module.launcher.artifact.ArtifactClassLoader;
-import org.mule.module.launcher.artifact.ShutdownListener;
-import org.mule.module.reboot.MuleContainerBootstrapUtils;
-import org.mule.module.reboot.MuleContainerSystemClassLoader;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.DailyRollingFileAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Hierarchy;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggerRepository;
 import org.apache.log4j.spi.RepositorySelector;
-import org.apache.log4j.spi.RootLogger;
-import org.apache.log4j.xml.DOMConfigurator;
 
 public class ArtifactAwareRepositorySelector implements RepositorySelector
 {
+
     protected static final String PATTERN_LAYOUT = "%-5p %d [%t] %c: %m%n";
 
     protected static final Integer NO_CCL_CLASSLOADER = 0;
 
     public static final String MULE_APP_LOG_FILE_TEMPLATE = "mule-app-%s.log";
 
-    protected LoggerRepositoryCache cache = new LoggerRepositoryCache();
+    //protected LoggerRepositoryCache cache = new LoggerRepositoryCache();
 
     // note that this is a direct log4j logger declaration, not a clogging one
     protected Logger logger = Logger.getLogger(getClass());
@@ -58,7 +29,9 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
     @Override
     public LoggerRepository getLoggerRepository()
     {
-        final ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        return null;
+    }
+        /*final ClassLoader ccl = Thread.currentThread().getContextClassLoader();
 
         LoggerRepository repository = repositoryUnderConstruction.get();
         if (repository != null)
@@ -69,10 +42,10 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
         repository = cache.getLoggerRepository(ccl);
         if (repository == null)
         {
-            final RootLogger root = new RootLogger(Level.INFO);
-            repository = new Hierarchy(root);
+            final Logger root = LogManager.getRootLogger();
+            //repository = new Hierarchy(root);
 
-            repositoryUnderConstruction.set(repository);
+            //repositoryUnderConstruction.set(repository);
 
             try
             {
@@ -190,7 +163,7 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
                 appendersToRemove.add(appender);
             }
         }
-        for(Appender appender : appendersToRemove)
+        for (Appender appender : appendersToRemove)
         {
             root.removeAppender(appender);
         }
@@ -265,6 +238,7 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
 
     protected static class LoggerRepositoryCache
     {
+
         protected ConcurrentMap<Integer, LoggerRepository> repositories = new ConcurrentHashMap<Integer, LoggerRepository>();
 
         public LoggerRepository getLoggerRepository(ClassLoader classLoader)
@@ -292,6 +266,7 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
     // this is a modified and unified version from log4j to better fit Mule's app lifecycle
     protected class ConfigWatchDog extends Thread
     {
+
         protected LoggerRepository repository;
         protected File file;
         protected long lastModif = 0;
@@ -302,16 +277,17 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
          * The default delay between every file modification check, set to 60
          * seconds.
          */
-        static final public long DEFAULT_DELAY = 60000;
+        //static final public long DEFAULT_DELAY = 60000;
         /**
          * The name of the file to observe  for changes.
          */
-        protected String filename;
+        //protected String filename;
 
         /**
          * The delay to observe between every check. By default set {@link
          * #DEFAULT_DELAY}.
          */
+        /*
         protected long delay = DEFAULT_DELAY;
 
         public ConfigWatchDog(final ClassLoader classLoader, String filename, LoggerRepository repository)
@@ -332,7 +308,7 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
             else if (!(classLoader instanceof MuleContainerSystemClassLoader))
             {
                 throw new MuleRuntimeException(CoreMessages.createStaticMessage("Can't create a ConfigWatchDog thread for " +
-                                           "current class loader of type %s", classLoader.getClass().getName()));
+                                                                                "current class loader of type %s", classLoader.getClass().getName()));
             }
 
             this.filename = filename;
@@ -362,6 +338,7 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
         /**
          * Set the delay to observe between each check of the file changes.
          */
+    /*
         public void setDelay(long delay)
         {
             this.delay = delay;
@@ -424,6 +401,6 @@ public class ArtifactAwareRepositorySelector implements RepositorySelector
             }
         }
 
-    }
+    }                 */
 }
 

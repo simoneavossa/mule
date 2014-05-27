@@ -10,7 +10,6 @@ import org.mule.module.logging.MuleLogFactory;
 
 import java.util.Hashtable;
 
-import org.apache.commons.logging.impl.SLF4JLogFactory;
 
 /**
  * <p>
@@ -25,7 +24,7 @@ public abstract class LogFactory
 
     static String UNSUPPORTED_OPERATION_IN_JCL_OVER_SLF4J = "http://www.slf4j.org/codes.html#unsupported_operation_in_jcl_over_slf4j";
 
-    static LogFactory logFactory = new MuleLogFactory();
+    //static LogFactory logFactory = new MuleLogFactory();
 
     /**
      * The name (<code>priority</code>) of the key in the config file used to
@@ -231,10 +230,10 @@ public abstract class LogFactory
      * @throws LogConfigurationException if the implementation class is not available or cannot
      *                                   be instantiated.
      */
-    public static LogFactory getFactory() throws LogConfigurationException
-    {
-        return logFactory;
-    }
+    //public static LogFactory getFactory() throws LogConfigurationException
+    //{
+    //    return logFactory;
+    //}
 
     /**
      * Convenience method to return a named logger, without the application having
@@ -244,10 +243,10 @@ public abstract class LogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code> instance cannot be
      *                                   returned
      */
-    public static Log getLog(Class clazz) throws LogConfigurationException
-    {
-        return (getFactory().getInstance(clazz));
-    }
+    //public static Log getLog(Class clazz) throws LogConfigurationException
+    //{
+    //    return (getFactory().getInstance(clazz));
+    //}
 
     /**
      * Convenience method to return a named logger, without the application having
@@ -259,10 +258,10 @@ public abstract class LogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code> instance cannot be
      *                                   returned
      */
-    public static Log getLog(String name) throws LogConfigurationException
-    {
-        return (getFactory().getInstance(name));
-    }
+    //public static Log getLog(String name) throws LogConfigurationException
+    //{
+    //    return (getFactory().getInstance(name));
+    //}
 
     /**
      * Release any internal references to previously created {@link LogFactory}

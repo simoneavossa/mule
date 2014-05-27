@@ -6,16 +6,14 @@
  */
 package org.apache.commons.logging.impl;
 
-import org.slf4j.spi.LocationAwareLogger;
-
 /**
  * A subclass to open up the acess.
  */
-public class MuleLocationAwareLog extends SLF4JLocationAwareLog
+public class MuleLocationAwareLog //extends SLF4JLocationAwareLog
 {
 
-    public MuleLocationAwareLog(LocationAwareLogger logger)
-    {
-        super(logger);
-    }
+    //public MuleLocationAwareLog(LocationAwareLogger logger)
+    //{
+    //    super(logger);
+    //}
 }

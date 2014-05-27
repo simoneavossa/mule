@@ -15,14 +15,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogConfigurationException;
-import org.apache.commons.logging.impl.MuleLocationAwareLog;
-import org.apache.commons.logging.impl.MuleLog;
-import org.apache.commons.logging.impl.SLF4JLogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.spi.LocationAwareLogger;
 
-public class MuleLogFactory extends SLF4JLogFactory
+public class MuleLogFactory//=extends SLF4JLogFactory
 {
 
     public static final String LOG_HANDLER_THREAD_NAME = "Mule.log.clogging.ref.handler";
@@ -78,11 +75,11 @@ public class MuleLogFactory extends SLF4JLogFactory
             Logger logger = LoggerFactory.getLogger(name);
             if (logger instanceof LocationAwareLogger)
             {
-                instance = new MuleLocationAwareLog((LocationAwareLogger) logger);
+                //instance = new MuleLocationAwareLog((LocationAwareLogger) logger);
             }
             else
             {
-                instance = new MuleLog(logger);
+                //instance = new MuleLog(logger);
             }
             final Log previous = loggerMap.putIfAbsent(name, instance);
             if (previous != null)

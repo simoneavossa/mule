@@ -6,24 +6,7 @@
  */
 package org.mule;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import org.mule.api.MuleException;
-import org.mule.module.launcher.application.Application;
-import org.mule.module.launcher.log4j.ArtifactAwareRepositorySelector;
 import org.mule.test.infrastructure.deployment.AbstractFakeMuleServerTestCase;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Test;
 
 /**
  * Checks log4j configuration for application and domains
@@ -33,7 +16,7 @@ public class LogConfigurationTestCase extends AbstractFakeMuleServerTestCase
 
     public static final String APP_NAME = "app1";
     public static final String DOMAIN_NAME = "domain";
-
+                                  /*
     @Test
     public void defaultAppLoggingConfigurationOnlyLogsOnApplicationLogFile() throws IOException, MuleException
     {
@@ -124,5 +107,5 @@ public class LogConfigurationTestCase extends AbstractFakeMuleServerTestCase
     {
         return selectByClass(root, Appender.class).size();
     }
-
+                 */
 }

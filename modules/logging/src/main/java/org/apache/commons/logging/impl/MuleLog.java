@@ -6,16 +6,14 @@
  */
 package org.apache.commons.logging.impl;
 
-import org.slf4j.Logger;
-
 /**
  * A subclass to open up the acess.
  */
-public class MuleLog extends SLF4JLog
+public class MuleLog //extends SLF4JLog
 {
 
-    public MuleLog(Logger logger)
-    {
-        super(logger);
-    }
+    //public MuleLog(Logger logger)
+    //{
+    //    super(logger);
+    //}
 }
