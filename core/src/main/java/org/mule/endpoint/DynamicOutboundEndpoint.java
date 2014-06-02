@@ -15,6 +15,8 @@ import org.mule.api.endpoint.EndpointException;
 import org.mule.api.endpoint.EndpointMessageProcessorChainFactory;
 import org.mule.api.endpoint.EndpointURI;
 import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.api.exception.MessagingExceptionHandler;
+import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.api.retry.RetryPolicyTemplate;
@@ -46,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * cannot change an endpoint scheme dynamically so you can't switch between
  * HTTP and JMS for example using the same dynamic endpoint.
  */
-public class DynamicOutboundEndpoint implements OutboundEndpoint
+public class DynamicOutboundEndpoint implements OutboundEndpoint, MessagingExceptionHandlerAware
 {
 
     protected transient final Log logger = LogFactory.getLog(DynamicOutboundEndpoint.class);
@@ -61,6 +63,8 @@ public class DynamicOutboundEndpoint implements OutboundEndpoint
     private final Map<String, OutboundEndpoint> staticEndpoints = Collections.synchronizedMap(new LRUMap(64));
 
     private final DynamicURIBuilder dynamicURIBuilder;
+
+    private MessagingExceptionHandler messagingExceptionHandler;
 
     public DynamicOutboundEndpoint(EndpointBuilder endpointBuilder, DynamicURIBuilder dynamicURIBuilder)
     {
@@ -106,6 +110,10 @@ public class DynamicOutboundEndpoint implements OutboundEndpoint
             final EndpointURI endpointURIForMessage = createEndpointUri(uri);
             outboundEndpoint = createStaticEndpoint(endpointURIForMessage);
             staticEndpoints.put(endpointURIForMessage.getAddress(), outboundEndpoint);
+        }
+        if (outboundEndpoint instanceof MessagingExceptionHandlerAware)
+        {
+            ((MessagingExceptionHandlerAware) outboundEndpoint).setMessagingExceptionHandler(messagingExceptionHandler);
         }
 
         return outboundEndpoint.process(event);
@@ -304,5 +312,11 @@ public class DynamicOutboundEndpoint implements OutboundEndpoint
     public boolean isDisableTransportTransformer()
     {
         return prototypeEndpoint.isDisableTransportTransformer();
+    }
+
+    @Override
+    public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
+    {
+        this.messagingExceptionHandler = messagingExceptionHandler;
     }
 }

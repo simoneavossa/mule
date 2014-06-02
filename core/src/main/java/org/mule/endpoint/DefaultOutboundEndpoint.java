@@ -18,6 +18,8 @@ import org.mule.api.context.MuleContextAware;
 import org.mule.api.endpoint.EndpointMessageProcessorChainFactory;
 import org.mule.api.endpoint.EndpointURI;
 import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.api.exception.MessagingExceptionHandler;
+import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.api.retry.RetryPolicyTemplate;
@@ -32,10 +34,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultOutboundEndpoint extends AbstractEndpoint implements OutboundEndpoint
+public class DefaultOutboundEndpoint extends AbstractEndpoint implements OutboundEndpoint, MessagingExceptionHandlerAware
 {
     private static final long serialVersionUID = 8860985949279708638L;
-
+    private MessagingExceptionHandler messagingExceptionHandler;
     private List<String> responseProperties;
 
     public DefaultOutboundEndpoint(Connector connector,
@@ -120,7 +122,17 @@ public class DefaultOutboundEndpoint extends AbstractEndpoint implements Outboun
         {
             ((Initialisable) chain).initialise();
         }
+        if (chain instanceof MessagingExceptionHandlerAware)
+        {
+            ((MessagingExceptionHandlerAware) chain).setMessagingExceptionHandler(messagingExceptionHandler);
+        }
         
         return chain;
+    }
+
+    @Override
+    public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
+    {
+        this.messagingExceptionHandler = messagingExceptionHandler;
     }
 }

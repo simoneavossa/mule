@@ -15,6 +15,7 @@ import org.mule.api.construct.FlowConstructInvalidException;
 import org.mule.api.context.MuleContextAware;
 import org.mule.api.exception.MessagingExceptionHandler;
 import org.mule.api.exception.MessagingExceptionHandlerAcceptor;
+import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.Disposable;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
@@ -103,7 +104,7 @@ public abstract class AbstractFlowConstruct implements FlowConstruct, Lifecycle,
             {
                 public void onTransition(String phaseName, FlowConstruct object) throws MuleException
                 {
-                    injectFlowConstructMuleContext(exceptionListener);
+                    injectFlowConstructMuleContextExceptionHandler(exceptionListener);
                     initialiseIfInitialisable(exceptionListener);
                     validateConstruct();
                     doInitialise();
@@ -289,7 +290,7 @@ public abstract class AbstractFlowConstruct implements FlowConstruct, Lifecycle,
         }
     }
 
-    protected void injectFlowConstructMuleContext(Object candidate)
+    protected void injectFlowConstructMuleContextExceptionHandler(Object candidate)
     {
         if (candidate instanceof FlowConstructAware)
         {
@@ -298,6 +299,10 @@ public abstract class AbstractFlowConstruct implements FlowConstruct, Lifecycle,
         if (candidate instanceof MuleContextAware)
         {
             ((MuleContextAware) candidate).setMuleContext(muleContext);
+        }
+        if (candidate instanceof MessagingExceptionHandlerAware)
+        {
+            ((MessagingExceptionHandlerAware) candidate).setMessagingExceptionHandler(this.getExceptionListener());
         }
     }
 

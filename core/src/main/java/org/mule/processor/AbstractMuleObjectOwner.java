@@ -6,19 +6,21 @@
  */
 package org.mule.processor;
 
-import java.util.List;
-
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.api.construct.FlowConstructAware;
 import org.mule.api.context.MuleContextAware;
+import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.Disposable;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.lifecycle.Lifecycle;
 import org.mule.api.lifecycle.Startable;
 import org.mule.api.lifecycle.Stoppable;
+import org.mule.exception.SystemToMessagingExceptionHandlerAdapter;
+
+import java.util.List;
 
 /**
  * An object that owns Mule objects and delegates startup/shutdown events to them.
@@ -51,6 +53,9 @@ public abstract class AbstractMuleObjectOwner<T> implements Lifecycle, MuleConte
             }
             if (object instanceof FlowConstructAware) {
                 ((FlowConstructAware) object).setFlowConstruct(flowConstruct);
+            }
+            if (object instanceof MessagingExceptionHandlerAware) {
+                ((MessagingExceptionHandlerAware) object).setMessagingExceptionHandler(new SystemToMessagingExceptionHandlerAdapter());
             }
             if (object instanceof Initialisable) {
                 ((Initialisable) object).initialise();

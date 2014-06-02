@@ -13,6 +13,8 @@ import org.mule.api.MuleMessage;
 import org.mule.api.config.ThreadingProfile;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.EndpointException;
+import org.mule.api.exception.MessagingExceptionHandler;
+import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.lifecycle.Startable;
@@ -47,7 +49,7 @@ import java.util.concurrent.TimeUnit;
  * To execute until-successful synchronously the threading profile defined on it must have
  * doThreading attribute set with false value.
  */
-public class UntilSuccessful extends AbstractOutboundRouter implements UntilSuccessfulConfiguration
+public class UntilSuccessful extends AbstractOutboundRouter implements UntilSuccessfulConfiguration, MessagingExceptionHandlerAware
 {
 
     public static final String PROCESS_ATTEMPT_COUNT_PROPERTY_NAME = "process.attempt.count";
@@ -67,6 +69,7 @@ public class UntilSuccessful extends AbstractOutboundRouter implements UntilSucc
     private boolean synchronous = false;
     private ThreadingProfile threadingProfile;
     private UntilSuccessfulProcessingStrategy untilSuccessfulStrategy;
+    private MessagingExceptionHandler messagingExceptionHandler;
 
 
     @Override
@@ -146,6 +149,7 @@ public class UntilSuccessful extends AbstractOutboundRouter implements UntilSucc
                 threadingProfile = muleContext.getDefaultThreadingProfile();
             }
             this.untilSuccessfulStrategy = new AsynchronousUntilSuccessfulProcessingStrategy();
+            ((MessagingExceptionHandlerAware) this.untilSuccessfulStrategy).setMessagingExceptionHandler(messagingExceptionHandler);
         }
         this.untilSuccessfulStrategy.setUntilSuccessfulConfiguration(this);
 
@@ -321,5 +325,11 @@ public class UntilSuccessful extends AbstractOutboundRouter implements UntilSucc
     public void setSynchronous(boolean synchronous)
     {
         this.synchronous = synchronous;
+    }
+
+    @Override
+    public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
+    {
+        this.messagingExceptionHandler = messagingExceptionHandler;
     }
 }
