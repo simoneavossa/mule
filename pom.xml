@@ -1417,11 +1417,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-idea-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.3.1</version>
                 </plugin>
@@ -1701,14 +1696,6 @@
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER/${vmtype}/${jdk7Name}
                         </classpathContainer>
                     </classpathContainers>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-idea-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <jdkName>1.7</jdkName>
                 </configuration>
             </plugin>
 
