@@ -11,6 +11,7 @@ import org.mule.api.MuleException;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.api.construct.FlowConstructAware;
 import org.mule.api.context.MuleContextAware;
+import org.mule.api.exception.MessagingExceptionHandler;
 import org.mule.api.exception.MessagingExceptionHandlerAware;
 import org.mule.api.lifecycle.Disposable;
 import org.mule.api.lifecycle.Initialisable;
@@ -18,17 +19,18 @@ import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.lifecycle.Lifecycle;
 import org.mule.api.lifecycle.Startable;
 import org.mule.api.lifecycle.Stoppable;
-import org.mule.exception.SystemToMessagingExceptionHandlerAdapter;
 
 import java.util.List;
 
 /**
  * An object that owns Mule objects and delegates startup/shutdown events to them.
  */
-public abstract class AbstractMuleObjectOwner<T> implements Lifecycle, MuleContextAware, FlowConstructAware {
+public abstract class AbstractMuleObjectOwner<T> implements Lifecycle, MuleContextAware, FlowConstructAware, MessagingExceptionHandlerAware
+{
 
     protected MuleContext muleContext;
     protected FlowConstruct flowConstruct;
+    protected MessagingExceptionHandler messagingExceptionHandler;
 
     public void setMuleContext(MuleContext context) {
         this.muleContext = context;
@@ -36,6 +38,15 @@ public abstract class AbstractMuleObjectOwner<T> implements Lifecycle, MuleConte
 
     public void setFlowConstruct(FlowConstruct flowConstruct) {
         this.flowConstruct = flowConstruct;
+    }
+
+    @Override
+    public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
+    {
+        if (this.messagingExceptionHandler == null)
+        {
+            this.messagingExceptionHandler = messagingExceptionHandler;
+        }
     }
 
     public MuleContext getMuleContext() {
@@ -54,8 +65,8 @@ public abstract class AbstractMuleObjectOwner<T> implements Lifecycle, MuleConte
             if (object instanceof FlowConstructAware) {
                 ((FlowConstructAware) object).setFlowConstruct(flowConstruct);
             }
-            if (object instanceof MessagingExceptionHandlerAware) {
-                ((MessagingExceptionHandlerAware) object).setMessagingExceptionHandler(new SystemToMessagingExceptionHandlerAdapter());
+            if (messagingExceptionHandler != null && object instanceof MessagingExceptionHandlerAware) {
+                ((MessagingExceptionHandlerAware) object).setMessagingExceptionHandler(messagingExceptionHandler);
             }
             if (object instanceof Initialisable) {
                 ((Initialisable) object).initialise();

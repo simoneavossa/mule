@@ -168,7 +168,10 @@ public class AsyncInterceptingMessageProcessor extends AbstractInterceptingMessa
     @Override
     public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
     {
-        this.messagingExceptionHandler = messagingExceptionHandler;
+        if (this.messagingExceptionHandler == null)
+        {
+            this.messagingExceptionHandler = messagingExceptionHandler;
+        }
     }
 
     class AsyncMessageProcessorWorker extends AbstractMuleEventWork

@@ -111,12 +111,8 @@ public class DynamicOutboundEndpoint implements OutboundEndpoint, MessagingExcep
             outboundEndpoint = createStaticEndpoint(endpointURIForMessage);
             staticEndpoints.put(endpointURIForMessage.getAddress(), outboundEndpoint);
         }
-        if (outboundEndpoint instanceof MessagingExceptionHandlerAware)
-        {
-            ((MessagingExceptionHandlerAware) outboundEndpoint).setMessagingExceptionHandler(messagingExceptionHandler);
-        }
-
-        return outboundEndpoint.process(event);
+        MessageProcessor chain = ((DefaultOutboundEndpoint) outboundEndpoint).createMessageProcessorChain(messagingExceptionHandler, event.getFlowConstruct());
+        return chain.process(event);
     }
 
     private EndpointURI createEndpointUri(String uri) throws EndpointException, InitialisationException
@@ -314,9 +310,18 @@ public class DynamicOutboundEndpoint implements OutboundEndpoint, MessagingExcep
         return prototypeEndpoint.isDisableTransportTransformer();
     }
 
+    public MessageProcessor getExecutionMessageProcessor() throws MuleException
+    {
+        return this;
+    }
+
     @Override
     public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
     {
-        this.messagingExceptionHandler = messagingExceptionHandler;
+        if (this.messagingExceptionHandler == null)
+        {
+            this.messagingExceptionHandler = messagingExceptionHandler;
+        }
     }
+
 }

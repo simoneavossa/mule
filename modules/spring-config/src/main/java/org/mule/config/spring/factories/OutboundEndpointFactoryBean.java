@@ -8,11 +8,15 @@ package org.mule.config.spring.factories;
 
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.EndpointException;
+import org.mule.api.endpoint.EndpointMessageProcessorChainFactory;
 import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.api.processor.MessageProcessor;
 import org.mule.api.registry.ServiceType;
 import org.mule.endpoint.AbstractEndpoint;
+import org.mule.endpoint.DynamicOutboundEndpoint;
 import org.mule.endpoint.EndpointURIEndpointBuilder;
 import org.mule.processor.AbstractRedeliveryPolicy;
+import org.mule.transport.AbstractConnector;
 import org.mule.transport.service.TransportServiceDescriptor;
 
 /**
@@ -48,7 +52,14 @@ public class OutboundEndpointFactoryBean extends AbstractEndpointFactoryBean
         {
             AbstractEndpoint.class.cast(outboundEndpoint).setAnnotations(getAnnotations());
         }
-        return outboundEndpoint;
+        if (outboundEndpoint instanceof DynamicOutboundEndpoint)
+        {
+            return outboundEndpoint;
+        }
+        EndpointMessageProcessorChainFactory factory = getMessageProcessorsFactory();
+        MessageProcessor chain = factory.createOutboundMessageProcessorChain(outboundEndpoint,
+                                                                             ((AbstractConnector) getConnector()).createDispatcherMessageProcessor(outboundEndpoint));
+        return chain;
     }
 
     @Override

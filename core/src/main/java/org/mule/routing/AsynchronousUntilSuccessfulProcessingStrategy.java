@@ -300,6 +300,10 @@ public class AsynchronousUntilSuccessfulProcessingStrategy extends AbstractUntil
     @Override
     public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
     {
-        this.messagingExceptionHandler = messagingExceptionHandler;
+        if (this.messagingExceptionHandler == null)
+        {
+            this.messagingExceptionHandler = messagingExceptionHandler;
+        }
     }
+
 }

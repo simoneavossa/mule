@@ -34,10 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultOutboundEndpoint extends AbstractEndpoint implements OutboundEndpoint, MessagingExceptionHandlerAware
+public class DefaultOutboundEndpoint extends AbstractEndpoint implements OutboundEndpoint
 {
     private static final long serialVersionUID = 8860985949279708638L;
-    private MessagingExceptionHandler messagingExceptionHandler;
     private List<String> responseProperties;
 
     public DefaultOutboundEndpoint(Connector connector,
@@ -104,10 +103,10 @@ public class DefaultOutboundEndpoint extends AbstractEndpoint implements Outboun
     }
 
     @Override
-    protected MessageProcessor createMessageProcessorChain(FlowConstruct flowContruct) throws MuleException
+    protected MessageProcessor createMessageProcessorChain(FlowConstruct flowConstruct) throws MuleException
     {
         EndpointMessageProcessorChainFactory factory = getMessageProcessorsFactory();
-        MessageProcessor chain = factory.createOutboundMessageProcessorChain(this, flowContruct,
+        MessageProcessor chain = factory.createOutboundMessageProcessorChain(this,
             ((AbstractConnector) getConnector()).createDispatcherMessageProcessor(this));
 
         if (chain instanceof MuleContextAware)
@@ -116,23 +115,42 @@ public class DefaultOutboundEndpoint extends AbstractEndpoint implements Outboun
         }
         if (chain instanceof FlowConstructAware)
         {
-            ((FlowConstructAware) chain).setFlowConstruct(flowContruct);
+            ((FlowConstructAware) chain).setFlowConstruct(flowConstruct);
         }
         if (chain instanceof Initialisable)
         {
             ((Initialisable) chain).initialise();
         }
+        //if (chain instanceof MessagingExceptionHandlerAware)
+        //{
+        //    ((MessagingExceptionHandlerAware) chain).setMessagingExceptionHandler(messagingExceptionHandler);
+        //}
+
+        return chain;
+    }
+
+    protected MessageProcessor createMessageProcessorChain(MessagingExceptionHandler messagingExceptionHandler, FlowConstruct flowConstruct) throws MuleException
+    {
+        EndpointMessageProcessorChainFactory factory = getMessageProcessorsFactory();
+        MessageProcessor chain = factory.createOutboundMessageProcessorChain(this,
+                                                                             ((AbstractConnector) getConnector()).createDispatcherMessageProcessor(this));
         if (chain instanceof MessagingExceptionHandlerAware)
         {
             ((MessagingExceptionHandlerAware) chain).setMessagingExceptionHandler(messagingExceptionHandler);
         }
-        
+        if (chain instanceof MuleContextAware)
+        {
+            ((MuleContextAware) chain).setMuleContext(getMuleContext());
+        }
+        if (chain instanceof FlowConstructAware)
+        {
+            ((FlowConstructAware) chain).setFlowConstruct(flowConstruct);
+        }
+        if (chain instanceof Initialisable)
+        {
+            ((Initialisable) chain).initialise();
+        }
         return chain;
     }
 
-    @Override
-    public void setMessagingExceptionHandler(MessagingExceptionHandler messagingExceptionHandler)
-    {
-        this.messagingExceptionHandler = messagingExceptionHandler;
-    }
 }
